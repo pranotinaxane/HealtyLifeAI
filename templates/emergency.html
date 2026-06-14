@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Emergency Contacts - Healthy Life AI{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12 text-center">
+        <span class="badge bg-danger text-white px-3 py-2 rounded-pill mb-2">Emergency Help</span>
+        <h2 class="fw-bold text-danger">Emergency Critical Helplines</h2>
+        <p class="text-muted">Quick access to medical, mental health, and emergency response services.</p>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card p-4 mb-5 border-danger-subtle">
+            <h4 class="fw-bold mb-4">Immediate Assistance Numbers</h4>
+            
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Service Provider</th>
+                            <th>Number</th>
+                            <th>Scope / Description</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Ambulance / Medical Emergency</strong></td>
+                            <td><span class="badge bg-danger text-white fs-6 font-monospace px-3 py-2">102 / 911</span></td>
+                            <td class="small text-muted">Immediate medical assistance and ambulance dispatch services.</td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-danger copy-btn" data-num="102">Copy</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>National Emergency Number</strong></td>
+                            <td><span class="badge bg-dark text-white fs-6 font-monospace px-3 py-2">112</span></td>
+                            <td class="small text-muted">Single emergency contact number for multiple rescue services (police, medical).</td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-danger copy-btn" data-num="112">Copy</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mental Health Helpline</strong></td>
+                            <td><span class="badge bg-primary text-white fs-6 font-monospace px-3 py-2">988</span></td>
+                            <td class="small text-muted">Suicide and crisis lifeline providing 24/7 free and confidential mental health support.</td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-danger copy-btn" data-num="988">Copy</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Poison Control Center</strong></td>
+                            <td><span class="badge bg-warning text-dark fs-6 font-monospace px-3 py-2">1-800-222-1222</span></td>
+                            <td class="small text-muted">Expert immediate assistance for accidental poisonings and chemical exposures.</td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-danger copy-btn" data-num="1-800-222-1222">Copy</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Red Cross Health Helpline</strong></td>
+                            <td><span class="badge bg-secondary text-white fs-6 font-monospace px-3 py-2">1097</span></td>
+                            <td class="small text-muted">Medical consultation support, blood banks, and general health inquiries.</td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-danger copy-btn" data-num="1097">Copy</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="alert alert-warning border-warning-subtle d-flex align-items-start gap-3 rounded-3 mb-5">
+            <div class="bg-warning-subtle text-warning p-1 rounded">
+                <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: currentColor;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            </div>
+            <div>
+                <h6 class="fw-bold mb-1 text-dark">Disclaimer & Important Notice</h6>
+                <p class="mb-0 small text-muted">
+                    This application is an AI recommendation system and does NOT provide professional medical advice, diagnosis, or treatment. In case of any acute medical symptom or crisis, please contact emergency channels immediately or visit the nearest hospital.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const copyBtns = document.querySelectorAll('.copy-btn');
+        copyBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const num = this.getAttribute('data-num');
+                navigator.clipboard.writeText(num).then(() => {
+                    const originalText = this.textContent;
+                    this.textContent = 'Copied!';
+                    this.className = 'btn btn-sm btn-success';
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                        this.className = 'btn btn-sm btn-outline-danger';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                });
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Healthy Life AI{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="fw-bold mb-1">Health Dashboard</h2>
+        <p class="text-muted">Overview of your physical metrics and AI wellness recommendations</p>
+    </div>
+</div>
+
+{% if not profile %}
+<!-- State 1: Incomplete Profile -->
+<div class="row">
+    <div class="col-12">
+        <div class="bg-light border border-success border-dashed rounded-4 p-5 text-center my-4" style="border-style: dashed !important; border-width: 2px !important;">
+            <div class="card-icon-wrapper mx-auto mb-4" style="width: 70px; height: 70px;">
+                <svg viewBox="0 0 24 24" style="width: 36px; height: 36px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            </div>
+            <h3 class="fw-bold mb-2">Complete Your Health Profile</h3>
+            <p class="text-muted max-width-600 mx-auto mb-4">
+                To calculate your Body Mass Index (BMI) and generate personalized AI recommendations for diets, exercises, sleep, and water targets, we need to understand your physical metrics.
+            </p>
+            <a href="{{ url_for('profile') }}" class="btn btn-primary px-5 py-2.5">Set Up Health Profile</a>
+        </div>
+    </div>
+</div>
+{% else %}
+<!-- State 2: Complete Profile -->
+<div class="row g-4 mb-4">
+    <!-- BMI Card -->
+    <div class="col-lg-8">
+        <div class="card h-100 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-bold m-0">Body Mass Index (BMI) Summary</h4>
+                <span class="badge badge-bmi {% if recommendations.bmi_category == 'Underweight' %}badge-underweight{% elif recommendations.bmi_category == 'Normal' %}badge-normal{% elif recommendations.bmi_category == 'Overweight' %}badge-overweight{% else %}badge-obese{% endif %}">
+                    {{ recommendations.bmi_category }}
+                </span>
+            </div>
+            
+            <div class="row align-items-center my-3">
+                <div class="col-md-4 text-center border-end">
+                    <span class="display-3 fw-bold text-success">{{ recommendations.bmi }}</span>
+                    <p class="text-muted small mb-0">Your Calculated BMI</p>
+                </div>
+                <div class="col-md-8 px-md-4 mt-3 mt-md-0">
+                    <p class="small mb-2 text-muted">A BMI of 18.5 - 24.9 is considered normal/healthy. Below is your position relative to healthy thresholds:</p>
+                    
+                    <!-- BMI Slider Meter -->
+                    <div class="bmi-meter-wrapper">
+                        <div class="bmi-progress">
+                            <div class="bmi-indicator" id="bmi-indicator" data-bmi="{{ recommendations.bmi }}"></div>
+                        </div>
+                        <div class="bmi-meter-labels">
+                            <span>15 (Under)</span>
+                            <span>18.5 (Normal)</span>
+                            <span>25 (Over)</span>
+                            <span>30+ (Obese)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-top pt-3 mt-2 d-flex justify-content-between align-items-center">
+                <span class="small text-muted">AI Source: <strong>{{ recommendations.engine_source }}</strong></span>
+                <a href="{{ url_for('bmi') }}" class="btn btn-sm btn-outline-primary">Interactive Calculator</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Health Metrics Summary -->
+    <div class="col-lg-4">
+        <div class="card h-100 p-4">
+            <h4 class="fw-bold mb-3">Current Metrics</h4>
+            <ul class="list-group list-group-flush mb-4">
+                <li class="list-group-item d-flex justify-content-between px-0">
+                    <span class="text-muted">Age / Gender</span>
+                    <span class="fw-bold">{{ profile.age }} yrs / {{ profile.gender }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between px-0">
+                    <span class="text-muted">Height / Weight</span>
+                    <span class="fw-bold">{{ profile.height }} cm / {{ profile.weight }} kg</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between px-0">
+                    <span class="text-muted">Activity Level</span>
+                    <span class="fw-bold">{{ profile.activity_level }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between px-0 border-0">
+                    <span class="text-muted">Primary Goal</span>
+                    <span class="fw-bold text-success">{{ profile.goal }}</span>
+                </li>
+            </ul>
+            <a href="{{ url_for('profile') }}" class="btn btn-outline-primary w-100 mt-auto">Update Metrics</a>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3 mt-4">
+    <div class="col-12">
+        <h3 class="fw-bold mb-1">Your AI Recommendations</h3>
+        <p class="text-muted">Tailored wellness prescriptions based on your physical metrics</p>
+    </div>
+</div>
+
+<div class="dashboard-grid mb-5">
+    <!-- Diet Suggestion Card -->
+    <div class="card">
+        <div class="card-icon-wrapper" style="background-color: #ecfdf5; border-color: #a7f3d0;">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+        </div>
+        <h5 class="fw-bold mb-1">Personalized Diet</h5>
+        <span class="text-success small fw-semibold mb-3">{{ recommendations.diet_plan.title }}</span>
+        <p class="text-muted small mb-4">Target: <strong>{{ recommendations.diet_plan.target_calories }}</strong>. Focus on simple Indian foods custom-labeled for macros.</p>
+        <a href="{{ url_for('diet') }}" class="btn btn-sm btn-primary mt-auto align-self-start">View Detailed Meal Plan</a>
+    </div>
+
+    <!-- Fitness Suggestion Card -->
+    <div class="card">
+        <div class="card-icon-wrapper" style="background-color: #eff6ff; border-color: #bfdbfe;">
+            <svg viewBox="0 0 24 24" style="fill: #3b82f6;"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14 4.14 5.57 2 7.71 3.43 9.14 2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22 14.86 20.57 17 17.14 20.57 20.57z"/></svg>
+        </div>
+        <h5 class="fw-bold mb-1">Exercise Routine</h5>
+        <span class="text-primary small fw-semibold mb-3">{{ recommendations.exercise_plan.title }}</span>
+        <p class="text-muted small mb-4">Frequency: <strong>{{ recommendations.exercise_plan.frequency }}</strong>. Custom pacing designed to achieve health target.</p>
+        <a href="{{ url_for('fitness') }}" class="btn btn-sm btn-primary mt-auto align-self-start">View Full Workout</a>
+    </div>
+
+    <!-- Water Card -->
+    <div class="card">
+        <div class="card-icon-wrapper" style="background-color: #ecfeff; border-color: #a5f3fc;">
+            <svg viewBox="0 0 24 24" style="fill: #06b6d4;"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+        </div>
+        <h5 class="fw-bold mb-1">Hydration Goal</h5>
+        <span class="text-info small fw-semibold mb-3">{{ recommendations.water_target_liters }} Liters / Day</span>
+        <p class="text-muted small mb-4">Equivalent to roughly <strong>{{ recommendations.water_glasses }} glasses</strong> of water. Stay hydrated for optimal cognitive energy.</p>
+        <a href="{{ url_for('water') }}" class="btn btn-sm btn-primary mt-auto align-self-start">Check Water Guide</a>
+    </div>
+
+    <!-- Sleep Card -->
+    <div class="card">
+        <div class="card-icon-wrapper" style="background-color: #faf5ff; border-color: #f3e8ff;">
+            <svg viewBox="0 0 24 24" style="fill: #a855f7;"><path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-9 8.3-9.8.6-.1 1.2.3 1.3.9.1.5-.2 1.1-.8 1.3-3.6 1-6.1 4.3-6.1 8 0 4.6 3.8 8.4 8.4 8.4 3.4 0 6.6-2.1 7.9-5.3.2-.5.8-.8 1.3-.7.6.1 1 .7.9 1.3-.9 4.3-4.8 7.2-9.1 7.2z"/></svg>
+        </div>
+        <h5 class="fw-bold mb-1">Sleep Target</h5>
+        <span class="text-purple small fw-semibold mb-3" style="color: #a855f7;">{{ recommendations.sleep_target_hours }} / Night</span>
+        <p class="text-muted small mb-4">Healthy sleep assists with cellular repair and metabolism. Review sleep hygiene protocols.</p>
+        <a href="{{ url_for('sleep') }}" class="btn btn-sm btn-primary mt-auto align-self-start">Check Sleep Guide</a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Healthy Life AI{% endblock %} - AI Recommendation System</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom Style CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+
+    <!-- Toast Alerts Container -->
+    <div class="toast-container" id="toast-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, msg in messages %}
+                    <div class="toast show {% if category == 'error' %}error{% else %}success{% endif %}">
+                        <div class="toast-icon">
+                            {% if category == 'error' %}
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                            {% else %}
+                                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                            {% endif %}
+                        </div>
+                        <div class="toast-body">{{ msg }}</div>
+                        <div class="toast-close">&times;</div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="navbar navbar-expand-lg">
+        <div class="container-fluid max-width-container px-4">
+            <a href="{% if session.get('user_id') %}{{ url_for('dashboard') }}{% else %}{{ url_for('home') }}{% endif %}" class="nav-logo">
+                <svg viewBox="0 0 24 24" class="logo-icon">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                <span>HealthyLife <span class="accent-text">AI</span></span>
+            </a>
+            
+            <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <nav class="nav-menu" id="nav-menu">
+                {% if session.get('user_id') %}
+                    <span class="nav-user">Hello, <strong>{{ session.get('user_name') }}</strong></span>
+                    <a href="{{ url_for('dashboard') }}" class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}">Dashboard</a>
+                    <a href="{{ url_for('profile') }}" class="nav-link {% if request.endpoint == 'profile' %}active{% endif %}">My Profile</a>
+                    <a href="{{ url_for('bmi') }}" class="nav-link {% if request.endpoint == 'bmi' %}active{% endif %}">BMI Calculator</a>
+                    <a href="{{ url_for('diet') }}" class="nav-link {% if request.endpoint == 'diet' %}active{% endif %}">Diet Plan</a>
+                    <a href="{{ url_for('fitness') }}" class="nav-link {% if request.endpoint == 'fitness' %}active{% endif %}">Fitness</a>
+                    <a href="{{ url_for('water') }}" class="nav-link {% if request.endpoint == 'water' %}active{% endif %}">Water</a>
+                    <a href="{{ url_for('sleep') }}" class="nav-link {% if request.endpoint == 'sleep' %}active{% endif %}">Sleep</a>
+                    <a href="{{ url_for('tips') }}" class="nav-link {% if request.endpoint == 'tips' %}active{% endif %}">Wellness Tips</a>
+                    <a href="{{ url_for('emergency') }}" class="nav-link {% if request.endpoint == 'emergency' %}active{% endif %}">Emergency</a>
+                    <a href="{{ url_for('logout') }}" class="nav-btn">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('home') }}" class="nav-link {% if request.endpoint == 'home' %}active{% endif %}">Home</a>
+                    <a href="{{ url_for('emergency') }}" class="nav-link {% if request.endpoint == 'emergency' %}active{% endif %}">Emergency Contacts</a>
+                    <a href="{{ url_for('login') }}" class="nav-link {% if request.endpoint == 'login' %}active{% endif %}">Login</a>
+                    <a href="{{ url_for('register') }}" class="nav-btn">Register</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content-wrapper">
+        <div class="container px-4">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="footer-container">
+            <p>&copy; 2026 HealthyLife AI Recommendation System. All rights reserved.</p>
+            <div class="footer-meta">
+                <span>Personalized Health & Wellness Guide Using ML</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom Scripts -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

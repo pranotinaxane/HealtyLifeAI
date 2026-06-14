@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Wellness Tips - Healthy Life AI{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12 text-center">
+        <span class="badge bg-success text-white px-3 py-2 rounded-pill mb-2">Daily Inspiration</span>
+        <h2 class="fw-bold">Daily Wellness Tips</h2>
+        <p class="text-muted">Small habits done consistently yield massive lifelong improvements.</p>
+    </div>
+</div>
+
+<div class="row justify-content-center mb-5">
+    <div class="col-lg-7">
+        <!-- Main Rotator Card -->
+        <div class="card p-4 p-md-5 text-center shadow-lg border-primary border-top border-4">
+            <div class="card-icon-wrapper mx-auto mb-4" style="background-color: var(--primary-light); width: 65px; height: 65px;">
+                <svg viewBox="0 0 24 24" style="width: 30px; height: 30px;"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-1.3l-.85-.6C8.29 13.01 7.5 11.07 7.5 9c0-2.48 2.02-4.5 4.5-4.5s4.5 2.02 4.5 4.5c0 2.07-.79 4.01-2.15 5.1z"/></svg>
+            </div>
+            
+            <h4 class="fw-bold text-success mb-3" id="tip-category">NUTRITION</h4>
+            <blockquote class="blockquote mb-4">
+                <p id="tip-content" class="fs-4 fw-medium text-dark lh-base">"Chew your food 32 times. Mindful, slow eating aids digestion and prevents overeating."</p>
+            </blockquote>
+            
+            <button id="next-tip-btn" class="btn btn-primary px-4 py-2.5 mt-2">Next Wellness Tip &rarr;</button>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-12 text-center">
+        <h4 class="fw-bold mb-1">Wellness Pillars</h4>
+        <p class="text-muted small">Our recommendations are based on six structural areas of lifestyle health.</p>
+    </div>
+    <div class="col-md-4">
+        <div class="bg-white border rounded-3 p-3.5 h-100 text-center">
+            <h6 class="fw-bold text-success">1. Nutrition</h6>
+            <p class="small text-muted mb-0">Focus on balanced home-cooked Indian meals, whole grains, and lean proteins.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="bg-white border rounded-3 p-3.5 h-100 text-center">
+            <h6 class="fw-bold text-primary">2. Activity</h6>
+            <p class="small text-muted mb-0">Combine daily brisk walking, stretching, and resistance/strength training.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="bg-white border rounded-3 p-3.5 h-100 text-center">
+            <h6 class="fw-bold text-info">3. Hydration</h6>
+            <p class="small text-muted mb-0">Aim for a baseline of 2-3+ liters of pure water depending on your body weight.</p>
+        </div>
+    </div>
+    <div class="col-md-4 mt-md-4">
+        <div class="bg-white border rounded-3 p-3.5 h-100 text-center">
+            <h6 class="fw-bold text-purple" style="color: #a855f7;">4. Rest</h6>
+            <p class="small text-muted mb-0">Secure 7-9 hours of dark, cool room sleep to allow cellular repair cycles.</p>
+        </div>
+    </div>
+    <div class="col-md-4 mt-md-4">
+        <div class="bg-white border rounded-3 p-3.5 h-100 text-center">
+            <h6 class="fw-bold text-warning">5. Mindset</h6>
+            <p class="small text-muted mb-0">Incorporate micro-meditations, breathing sets, and digital detox habits daily.</p>
+        </div>
+    </div>
+    <div class="col-md-4 mt-md-4">
+        <div class="bg-white border rounded-3 p-3.5 h-100 text-center">
+            <h6 class="fw-bold text-danger">6. Hygiene</h6>
+            <p class="small text-muted mb-0">Maintain screen limits, clean breathing air, and structural spinal alignment.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const nextTipBtn = document.getElementById('next-tip-btn');
+        const tipCategory = document.getElementById('tip-category');
+        const tipContent = document.getElementById('tip-content');
+        
+        const tips = [
+            { cat: "NUTRITION", text: "Chew your food 32 times. Mindful, slow eating aids digestion and prevents overeating." },
+            { cat: "HYDRATION", text: "Drink a glass of water first thing in the morning to kickstart your metabolism and rehydrate." },
+            { cat: "SLEEP & REST", text: "Avoid screens at least 45 minutes before bed. Blue light disrupts melatonin production." },
+            { cat: "ACTIVITY", text: "Take a short walk after meals, particularly dinner, to help control blood sugar spikes." },
+            { cat: "HYGIENE", text: "Practice the 20-20-20 rule for eye health: every 20 minutes look at something 20 feet away for 20 seconds." },
+            { cat: "MINDSET & RELIEF", text: "Manage stress via box breathing: breathe in for 4 seconds, hold for 4, exhale for 4, hold for 4." },
+            { cat: "NUTRITION", text: "Include raw fiber in your lunch like carrots, radish, cucumbers, and tomatoes." },
+            { cat: "SLEEP & REST", text: "Stay consistent with sleep schedules. Waking up at the same time daily stabilizes your body clock." },
+            { cat: "ACTIVITY", text: "Take a 5-minute stretch or walk break for every hour you spend sitting at a desk." },
+            { cat: "NUTRITION", text: "Limit sugary beverages and opt for green tea or infused water instead." }
+        ];
+        
+        let currentIdx = 0;
+        
+        if (nextTipBtn && tipCategory && tipContent) {
+            nextTipBtn.addEventListener('click', function() {
+                // Fade effect or simple rotation
+                currentIdx = (currentIdx + 1) % tips.length;
+                tipCategory.textContent = tips[currentIdx].cat;
+                tipContent.textContent = '"' + tips[currentIdx].text + '"';
+            });
+            
+            // Randomize initial tip on load
+            const randIdx = Math.floor(Math.random() * tips.length);
+            currentIdx = randIdx;
+            tipCategory.textContent = tips[currentIdx].cat;
+            tipContent.textContent = '"' + tips[currentIdx].text + '"';
+        }
+    });
+</script>
+{% endblock %}

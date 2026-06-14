@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Healthy Life AI{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card p-4 p-md-5 mt-4">
+            <div class="text-center mb-4">
+                <svg viewBox="0 0 24 24" class="logo-icon mb-2" style="width: 45px; height: 45px; fill: var(--primary);">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                </svg>
+                <h2 class="fw-bold">Welcome Back</h2>
+                <p class="text-muted">Sign in to view your AI health profile</p>
+            </div>
+            
+            <form action="{{ url_for('login') }}" method="POST" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                    <div class="invalid-feedback">Please enter a valid email address.</div>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <label for="password" class="form-label mb-0">Password</label>
+                    </div>
+                    <input type="password" class="form-control mt-1" id="password" name="password" placeholder="••••••••" required>
+                    <div class="invalid-feedback">Please enter your password.</div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-100 py-2.5">Sign In</button>
+            </form>
+            
+            <div class="text-center mt-4">
+                <p class="text-muted mb-0">Don't have an account? <a href="{{ url_for('register') }}" class="text-success fw-bold text-decoration-none">Sign Up</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Bootstrap form validation
+(function () {
+  'use strict'
+  var forms = document.querySelectorAll('.needs-validation')
+  Array.prototype.slice.call(forms)
+    .forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    })
+})()
+</script>
+{% endblock %}

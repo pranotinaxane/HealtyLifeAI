@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Healthy Life AI{% endblock %}
+
+{% block content %}
+<div class="row align-items-center hero-section py-5 px-4 mb-5">
+    <div class="col-lg-6 mb-4 mb-lg-0">
+        <span class="badge bg-success text-white px-3 py-2 rounded-pill mb-3">AI-Powered Wellness</span>
+        <h1 class="display-4 fw-bold mb-3">Transform Your Health with Precision Intelligence</h1>
+        <p class="lead text-muted mb-4">
+            Receive fully personalized diet, fitness, hydration, and sleep recommendations powered by our Machine Learning Decision Tree analysis. Tailored to your body metrics and daily lifestyle.
+        </p>
+        <div class="d-flex gap-3">
+            {% if session.get('user_id') %}
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg">Go to Dashboard</a>
+                <a href="{{ url_for('profile') }}" class="btn btn-outline-primary btn-lg">Edit Health Profile</a>
+            {% else %}
+                <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Get Started Free</a>
+                <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg">Sign In</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-lg-6 text-center">
+        <!-- SVG Graphic illustrating healthy living -->
+        <svg viewBox="0 0 500 400" width="100%" height="auto" style="max-width: 450px;">
+            <circle cx="250" cy="200" r="140" fill="#e6fcf5" />
+            <circle cx="250" cy="200" r="100" fill="#c6f6e5" />
+            <!-- Heart icon inside -->
+            <path d="M250 240l-22-20.2c-78-70.8-129-117-129-174.8 0-47 37-84 84-84 26.5 0 52 12.3 67 31.8 15-19.5 40.5-31.8 67-31.8 47 0 84 37 84 84 0 57.8-51 104-129 175l-22 20z" fill="#10b981" transform="scale(0.4) translate(460, 340)"/>
+            <!-- Wellness rays or design -->
+            <circle cx="120" cy="120" r="15" fill="#3b82f6" opacity="0.6"/>
+            <circle cx="380" cy="120" r="20" fill="#f59e0b" opacity="0.6"/>
+            <circle cx="370" cy="290" r="25" fill="#10b981" opacity="0.4"/>
+            <circle cx="130" cy="290" r="12" fill="#6b7280" opacity="0.3"/>
+            <!-- Modern abstract lines -->
+            <path d="M150,200 Q250,150 350,200" stroke="#10b981" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.7"/>
+            <path d="M180,220 Q250,190 320,220" stroke="#059669" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+    </div>
+</div>
+
+<div class="mb-5 text-center">
+    <h2 class="fw-bold mb-2">Our System Features</h2>
+    <p class="text-muted max-width-600 mx-auto">Explore the modules designed to assist you in making informed wellness choices daily.</p>
+</div>
+
+<div class="row g-4 mb-5">
+    <!-- BMI Card -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-icon-wrapper">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4 6h-4v2h4v2h-4v2h4v2H9V7h6v2z"/></svg>
+            </div>
+            <h4 class="fw-bold">BMI Analyzer</h4>
+            <p class="text-muted">Instantly evaluate your body mass index and find out where you stand on the weight-to-height spectrum.</p>
+            <a href="{% if session.get('user_id') %}{{ url_for('bmi') }}{% else %}{{ url_for('login') }}{% endif %}" class="btn btn-sm btn-outline-primary mt-auto align-self-start">Go to Calculator</a>
+        </div>
+    </div>
+    <!-- Diet Card -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-icon-wrapper">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+            </div>
+            <h4 class="fw-bold">AI Diet Plans</h4>
+            <p class="text-muted">Receive simple Indian meal plans structured dynamically for calorie surpluses, deficits, or balanced maintenance.</p>
+            <a href="{% if session.get('user_id') %}{{ url_for('diet') }}{% else %}{{ url_for('login') }}{% endif %}" class="btn btn-sm btn-outline-primary mt-auto align-self-start">Go to Diet Plans</a>
+        </div>
+    </div>
+    <!-- Exercise Card -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-icon-wrapper">
+                <svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14 4.14 5.57 2 7.71 3.43 9.14 2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22 14.86 20.57 17 17.14 20.57 20.57z"/></svg>
+            </div>
+            <h4 class="fw-bold">Fitness Routines</h4>
+            <p class="text-muted">Get adaptive exercises matching your active profile, age, and health objective ranging from yoga to gym lifting.</p>
+            <a href="{% if session.get('user_id') %}{{ url_for('fitness') }}{% else %}{{ url_for('login') }}{% endif %}" class="btn btn-sm btn-outline-primary mt-auto align-self-start">Go to Workouts</a>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <!-- Water Card -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-icon-wrapper">
+                <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+            </div>
+            <h4 class="fw-bold">Hydration Tracker</h4>
+            <p class="text-muted">Calculate optimal water targets dynamically adjusted to your metabolic body weight and daily activity level.</p>
+            <a href="{% if session.get('user_id') %}{{ url_for('water') }}{% else %}{{ url_for('login') }}{% endif %}" class="btn btn-sm btn-outline-primary mt-auto align-self-start">Calculate Water</a>
+        </div>
+    </div>
+    <!-- Sleep Card -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-icon-wrapper">
+                <svg viewBox="0 0 24 24"><path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-9 8.3-9.8.6-.1 1.2.3 1.3.9.1.5-.2 1.1-.8 1.3-3.6 1-6.1 4.3-6.1 8 0 4.6 3.8 8.4 8.4 8.4 3.4 0 6.6-2.1 7.9-5.3.2-.5.8-.8 1.3-.7.6.1 1 .7.9 1.3-.9 4.3-4.8 7.2-9.1 7.2z"/></svg>
+            </div>
+            <h4 class="fw-bold">Sleep Recommendations</h4>
+            <p class="text-muted">Receive target resting advice and learn the scientific fundamentals of quality sleep hygiene.</p>
+            <a href="{% if session.get('user_id') %}{{ url_for('sleep') }}{% else %}{{ url_for('login') }}{% endif %}" class="btn btn-sm btn-outline-primary mt-auto align-self-start">Check Sleep Guide</a>
+        </div>
+    </div>
+    <!-- Tips Card -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-icon-wrapper">
+                <svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-1.3l-.85-.6C8.29 13.01 7.5 11.07 7.5 9c0-2.48 2.02-4.5 4.5-4.5s4.5 2.02 4.5 4.5c0 2.07-.79 4.01-2.15 5.1z"/></svg>
+            </div>
+            <h4 class="fw-bold">Daily Wellness Tips</h4>
+            <p class="text-muted">Rotate through expert wellness guidelines on mindfulness, physical pacing, and nutritional routines.</p>
+            <a href="{% if session.get('user_id') %}{{ url_for('tips') }}{% else %}{{ url_for('login') }}{% endif %}" class="btn btn-sm btn-outline-primary mt-auto align-self-start">Read Wellness Tips</a>
+        </div>
+    </div>
+</div>
+
+<div class="bg-light border rounded-4 p-5 text-center mb-5">
+    <h3 class="fw-bold mb-3">Emergency Critical Helplines</h3>
+    <p class="text-muted mb-4">Immediate access to national emergency channels, ambulance systems, poison controls, and support lifelines.</p>
+    <a href="{{ url_for('emergency') }}" class="btn btn-danger px-4 py-2">View Emergency Contacts</a>
+</div>
+{% endblock %}

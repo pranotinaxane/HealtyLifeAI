@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Sleep Recommendation - Healthy Life AI{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="fw-bold mb-1">Sleep Recommendations & Guide</h2>
+        <p class="text-muted">Sleep is the foundation of physical recovery, muscle synthesis, and mental health.</p>
+    </div>
+</div>
+
+{% if not profile %}
+<!-- State 1: Incomplete Profile -->
+<div class="bg-light border rounded-4 p-5 text-center my-4">
+    <h3>Complete Profile to View Sleep Recommendations</h3>
+    <p class="text-muted mb-4">Sleep recommendations adjust with your age and activity level. Please complete your health metrics first.</p>
+    <a href="{{ url_for('profile') }}" class="btn btn-primary">Set Up Profile</a>
+</div>
+{% else %}
+<!-- State 2: Complete Profile -->
+<div class="row g-4 mb-5">
+    <!-- Calculator Result -->
+    <div class="col-lg-5">
+        <div class="card p-4 h-100 justify-content-between">
+            <div>
+                <div class="card-icon-wrapper" style="background-color: #faf5ff; border-color: #f3e8ff; width: 60px; height: 60px;">
+                    <svg viewBox="0 0 24 24" style="fill: #a855f7; width: 30px; height: 30px;"><path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-9 8.3-9.8.6-.1 1.2.3 1.3.9.1.5-.2 1.1-.8 1.3-3.6 1-6.1 4.3-6.1 8 0 4.6 3.8 8.4 8.4 8.4 3.4 0 6.6-2.1 7.9-5.3.2-.5.8-.8 1.3-.7.6.1 1.7.9 1.3-.9 4.3-4.8 7.2-9.1 7.2z"/></svg>
+                </div>
+                <h3 class="fw-bold my-3">My Sleep Prescription</h3>
+                
+                <div class="mb-4">
+                    <label class="text-muted small d-block mb-1">Recommended Duration</label>
+                    <span class="fs-2 fw-bold" style="color: #a855f7;">{{ recommendations.sleep_target_hours }}</span>
+                </div>
+                
+                <p class="text-muted small mb-0">{{ recommendations.sleep_note }}</p>
+            </div>
+            
+            <div class="bg-light p-3 rounded-3 mt-4">
+                <h6 class="fw-bold mb-2">Age Context:</h6>
+                <p class="small text-muted mb-0">Age: <strong>{{ profile.age }} years</strong>. Your sleep requirements are predicted by evaluating circadian rhythm variables relative to age cohorts.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Sleep Cycle Calculator -->
+    <div class="col-lg-7">
+        <div class="card p-4 h-100">
+            <h4 class="fw-bold mb-3">Sleep Cycle Calculator</h4>
+            <p class="text-muted small mb-4">Human sleep runs in <strong>90-minute cycles</strong>. Waking up in the middle of a cycle causes grogginess, while waking at the end of a cycle makes you feel refreshed. Input when you want to wake up to view optimal bedtimes:</p>
+            
+            <div class="row align-items-center mb-4">
+                <div class="col-sm-6">
+                    <label for="wake-time" class="form-label">Desired Wake-up Time</label>
+                    <input type="time" class="form-control" id="wake-time" value="07:00">
+                </div>
+                <div class="col-sm-6 mt-3 mt-sm-0 pt-sm-4">
+                    <button id="calculate-sleep-btn" class="btn btn-primary w-100" style="background-color: #a855f7; border-color: #a855f7;">Calculate Bedtimes</button>
+                </div>
+            </div>
+
+            <div id="sleep-results" class="bg-light p-3 rounded-3" style="display: none;">
+                <h6 class="fw-bold mb-3 text-purple" style="color: #a855f7;">Optimal Bedtimes (Aim for 5 to 6 cycles):</h6>
+                <div class="row g-2">
+                    <div class="col-sm-6">
+                        <div class="border rounded bg-white p-2.5 text-center">
+                            <div class="fw-bold text-dark fs-5" id="sleep-time-6">10:00 PM</div>
+                            <span class="small text-success">9.0 Hours (6 cycles) - Highly recommended</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="border rounded bg-white p-2.5 text-center">
+                            <div class="fw-bold text-dark fs-5" id="sleep-time-5">11:30 PM</div>
+                            <span class="small text-success">7.5 Hours (5 cycles) - Recommended</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 mt-2">
+                        <div class="border rounded bg-white p-2.5 text-center">
+                            <div class="fw-bold text-dark fs-5" id="sleep-time-4">01:00 AM</div>
+                            <span class="small text-warning">6.0 Hours (4 cycles) - Okay</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 mt-2">
+                        <div class="border rounded bg-white p-2.5 text-center">
+                            <div class="fw-bold text-dark fs-5" id="sleep-time-3">02:30 AM</div>
+                            <span class="small text-danger">4.5 Hours (3 cycles) - Insufficient</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-3 text-muted small">
+                    *Note: It takes an average of 14 minutes for a person to fall asleep. Aim to be in bed 15 minutes before the listed times.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card p-4 mb-5">
+    <h4 class="fw-bold mb-3">Sleep Hygiene Best Practices</h4>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="bg-light p-3 rounded h-100">
+                <h6 class="fw-bold mb-2">&bull; Light Isolation</h6>
+                <p class="small text-muted mb-0">Use blackout curtains and avoid blue screen exposure for 45 minutes before sleep. Blue light suppresses melatonin release.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="bg-light p-3 rounded h-100">
+                <h6 class="fw-bold mb-2">&bull; Dark, Cool Room</h6>
+                <p class="small text-muted mb-0">Set your room temperature to a cool setting (around 18-22 degrees Celsius). Lower temperatures mimic the body's natural sleep cycle transitions.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="bg-light p-3 rounded h-100">
+                <h6 class="fw-bold mb-2">&bull; Consistent Timings</h6>
+                <p class="small text-muted mb-0">Go to sleep and wake up at the exact same times every day. Consistency anchors your body's circadian clock for quality rest.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const calculateBtn = document.getElementById('calculate-sleep-btn');
+        const wakeTimeInput = document.getElementById('wake-time');
+        const resultsDiv = document.getElementById('sleep-results');
+        
+        if (calculateBtn && wakeTimeInput && resultsDiv) {
+            function formatAMPM(hours, minutes) {
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                let formattedHours = hours % 12;
+                formattedHours = formattedHours ? formattedHours : 12; // 0 should be 12
+                const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+                return formattedHours + ':' + formattedMinutes + ' ' + ampm;
+            }
+            
+            function calculateTimes() {
+                const wakeVal = wakeTimeInput.value;
+                if (!wakeVal) return;
+                
+                const [wakeH, wakeM] = wakeVal.split(':').map(Number);
+                
+                // Cycles multipliers in hours
+                const cycles = [6, 5, 4, 3];
+                cycles.forEach(c => {
+                    const totalMinsBack = c * 90;
+                    
+                    let sleepH = wakeH;
+                    let sleepM = wakeM - totalMinsBack;
+                    
+                    while (sleepM < 0) {
+                        sleepM += 60;
+                        sleepH -= 1;
+                    }
+                    while (sleepH < 0) {
+                        sleepH += 24;
+                    }
+                    
+                    const timeStr = formatAMPM(sleepH, sleepM);
+                    document.getElementById('sleep-time-' + c).textContent = timeStr;
+                });
+                
+                resultsDiv.style.display = 'block';
+            }
+            
+            calculateBtn.addEventListener('click', calculateTimes);
+            
+            // Run calculation initially
+            calculateTimes();
+        }
+    });
+</script>
+{% endblock %}

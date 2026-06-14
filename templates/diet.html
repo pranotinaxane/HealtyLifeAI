@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}Diet Plan - Healthy Life AI{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="fw-bold mb-1">AI Personalized Diet Plan</h2>
+        <p class="text-muted">Indian simple foods tailored to your health goal</p>
+    </div>
+</div>
+
+{% if not profile %}
+<!-- State 1: Incomplete Profile -->
+<div class="bg-light border rounded-4 p-5 text-center my-4">
+    <h3>Complete Profile to View Diet Plan</h3>
+    <p class="text-muted mb-4">Your diet plan depends on your age, BMI, and health goals. Please enter your metrics first.</p>
+    <a href="{{ url_for('profile') }}" class="btn btn-primary">Set Up Profile</a>
+</div>
+{% else %}
+<!-- State 2: Complete Profile -->
+<div class="row g-4 mb-5">
+    <!-- Main Plan Summary Card -->
+    <div class="col-lg-4">
+        <div class="card p-4 h-100">
+            <span class="badge bg-success text-white px-3 py-2 rounded-pill align-self-start mb-3">{{ recommendations.diet_plan.title }}</span>
+            <h3 class="fw-bold mb-3">Plan Summary</h3>
+            
+            <div class="mb-4">
+                <label class="text-muted small d-block mb-1">Daily Target Calories</label>
+                <span class="fs-4 fw-bold text-success">{{ recommendations.diet_plan.target_calories }}</span>
+            </div>
+
+            <div class="mb-4">
+                <label class="text-muted small d-block mb-1">Macronutrient Split</label>
+                <span class="fw-semibold">{{ recommendations.diet_plan.macronutrients }}</span>
+                <div class="progress mt-2" style="height: 10px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="d-flex justify-content-between small text-muted mt-1">
+                    <span>Carbs</span>
+                    <span>Protein</span>
+                    <span>Fats</span>
+                </div>
+            </div>
+
+            <div class="border-top pt-3 mt-auto">
+                <h5 class="fw-bold mb-2">Metrics Used:</h5>
+                <p class="small text-muted mb-1">&bull; Current BMI: <strong>{{ recommendations.bmi }}</strong> ({{ recommendations.bmi_category }})</p>
+                <p class="small text-muted mb-0">&bull; Goal: <strong>{{ profile.goal }}</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meals Plan Grid -->
+    <div class="col-lg-8">
+        <div class="card p-4">
+            <h4 class="fw-bold mb-4">Meal-by-Meal Breakdown (Indian Foods)</h4>
+            
+            <div class="row g-3">
+                <!-- Breakfast -->
+                <div class="col-12 border-bottom pb-3">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="bg-light p-2 rounded text-success fw-bold text-center" style="width: 45px;">AM</div>
+                        <div>
+                            <h5 class="fw-bold mb-1">Breakfast</h5>
+                            <p class="text-muted mb-0">{{ recommendations.diet_plan.meals.breakfast }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lunch -->
+                <div class="col-12 border-bottom py-3">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="bg-light p-2 rounded text-success fw-bold text-center" style="width: 45px;">Noon</div>
+                        <div>
+                            <h5 class="fw-bold mb-1">Lunch</h5>
+                            <p class="text-muted mb-0">{{ recommendations.diet_plan.meals.lunch }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Evening Snack -->
+                <div class="col-12 border-bottom py-3">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="bg-light p-2 rounded text-success fw-bold text-center" style="width: 45px;">PM</div>
+                        <div>
+                            <h5 class="fw-bold mb-1">Evening Snack</h5>
+                            <p class="text-muted mb-0">{{ recommendations.diet_plan.meals.evening }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dinner -->
+                <div class="col-12 py-3">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="bg-light p-2 rounded text-success fw-bold text-center" style="width: 45px;">PM</div>
+                        <div>
+                            <h5 class="fw-bold mb-1">Dinner</h5>
+                            <p class="text-muted mb-0">{{ recommendations.diet_plan.meals.dinner }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tips & Instructions -->
+<div class="card p-4 mb-5">
+    <h4 class="fw-bold mb-3">AI Dietary Advice & Principles</h4>
+    <div class="row">
+        {% for tip in recommendations.diet_plan.dietary_tips %}
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="bg-light p-3 rounded-3 h-100">
+                    <div class="text-success fw-bold mb-1">Rule #{{ loop.index }}</div>
+                    <p class="small text-muted mb-0">{{ tip }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

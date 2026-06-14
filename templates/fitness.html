@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Fitness Plan - Healthy Life AI{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="fw-bold mb-1">AI Personalized Fitness Routine</h2>
+        <p class="text-muted">Targeted exercise programs matching your activity level and goal</p>
+    </div>
+</div>
+
+{% if not profile %}
+<!-- State 1: Incomplete Profile -->
+<div class="bg-light border rounded-4 p-5 text-center my-4">
+    <h3>Complete Profile to View Fitness Plan</h3>
+    <p class="text-muted mb-4">Your workout plan depends on your age, current BMI, and activity level. Please complete your health metrics first.</p>
+    <a href="{{ url_for('profile') }}" class="btn btn-primary">Set Up Profile</a>
+</div>
+{% else %}
+<!-- State 2: Complete Profile -->
+<div class="row g-4 mb-5">
+    <!-- Routine Specifications -->
+    <div class="col-lg-4">
+        <div class="card p-4 h-100 justify-content-between">
+            <div>
+                <span class="badge bg-primary text-white px-3 py-2 rounded-pill align-self-start mb-3">{{ recommendations.exercise_plan.title }}</span>
+                <h3 class="fw-bold my-3">Routine Details</h3>
+                <p class="text-muted small">{{ recommendations.exercise_plan.description }}</p>
+                
+                <hr>
+                
+                <div class="mb-3">
+                    <label class="text-muted small d-block">Frequency</label>
+                    <span class="fw-bold text-primary">{{ recommendations.exercise_plan.frequency }}</span>
+                </div>
+                <div class="mb-3">
+                    <label class="text-muted small d-block">Session Duration</label>
+                    <span class="fw-bold text-primary">{{ recommendations.exercise_plan.duration }}</span>
+                </div>
+            </div>
+
+            <div class="border-top pt-3 mt-4">
+                <h5 class="fw-bold mb-2">Metrics Used:</h5>
+                <p class="small text-muted mb-1">&bull; Age: <strong>{{ profile.age }} years</strong></p>
+                <p class="small text-muted mb-1">&bull; Lifestyle: <strong>{{ profile.activity_level }}</strong></p>
+                <p class="small text-muted mb-0">&bull; Goal: <strong>{{ profile.goal }}</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workout List -->
+    <div class="col-lg-8">
+        <div class="card p-4">
+            <h4 class="fw-bold mb-3">Recommended Exercises</h4>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Exercise Name</th>
+                            <th>Sets</th>
+                            <th>Reps / Duration</th>
+                            <th>Primary Benefit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for exercise in recommendations.exercise_plan.exercises %}
+                            <tr>
+                                <td><strong>{{ exercise.name }}</strong></td>
+                                <td><span class="badge bg-light text-dark border">{{ exercise.sets }}</span></td>
+                                <td><span class="badge bg-light text-dark border">{{ exercise.reps }}</span></td>
+                                <td class="small text-muted">{{ exercise.benefit }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Safety and Precautions -->
+<div class="card p-4 mb-5 border-start border-danger border-4">
+    <div class="d-flex align-items-center gap-3">
+        <div class="bg-danger-subtle p-2 rounded text-danger" style="display: flex; align-items: center; justify-content: center;">
+            <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: currentColor;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        </div>
+        <div>
+            <h5 class="fw-bold mb-1 text-danger">Safety Guidelines & Precautions</h5>
+            <p class="mb-0 small text-muted">{{ recommendations.exercise_plan.precaution }} Remember to warm up for 5-10 minutes and cool down post-exercise.</p>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
